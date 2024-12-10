@@ -19,17 +19,41 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
-// 책제목과 번호를 MySQL에서 가져오는 엔드포인트
+// 책목록과 전체 항목 수를 MySQL에서 가져오는 엔드포인트
 app.get('/api/books', (req, res) => {
-  const query = 'SELECT * FROM tbl_book';  
-  connection.query(query, (err, results) => {
+  const { page = 1, limit = 10, name = "", author = "" } = req.query;  // 기본 페이지 1, 기본 항목 수 10
+  const offset = (page - 1) * limit;
+
+  // 제목과 작가를 기준으로 필터링할 수 있도록 쿼리 수정
+  let query = 'SELECT * FROM tbl_book WHERE name LIKE ? AND author LIKE ? LIMIT ? OFFSET ?';
+  let queryParams = [`%${name}%`, `%${author}%`, parseInt(limit), offset];
+
+  connection.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: '데이터베이스 조회 오류' });
     }
-    res.json({ list: results });
+
+    // 전체 항목 수 조회 쿼리, 필터링된 조건에 맞게
+    const countQuery = 'SELECT COUNT(*) AS totalItems FROM tbl_book WHERE name LIKE ? AND author LIKE ?';
+    connection.query(countQuery, [`%${name}%`, `%${author}%`], (err, countResults) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: '전체 항목 수 조회 오류' });
+      }
+      
+      const totalItems = countResults[0].totalItems;
+      
+      // 응답으로 목록과 전체 항목 수를 반환
+      res.json({
+        list: results,
+        totalItems: totalItems
+      });
+    });
   });
 });
+
+
 
 // 책 세부 정보를 MySQL에서 가져오는 엔드포인트
 app.get('/api/books/:id', (req, res) => {

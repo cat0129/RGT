@@ -8,13 +8,21 @@ const Book = () => {
   // 책 추가 및 수정
   const [newBook, setNewBook] = useState({ name: "", author: "", price: "", sold: "", stock: "" });
   const [editBook, setEditBook] = useState({ id: "", name: "", author: "", price: "", sold: "", stock: "" });
+  //페이지네이션
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [itemsPerPage] = useState(10); 
+  const [totalItems, setTotalItems] = useState(0); 
+  // 필터
+  const [filter, setFilter] = useState({ name: "", author: "" });
 
   // 책 목록 가져오기
   async function getBookList() {
     try {
-      const res = await axios.get("http://localhost:3100/api/books");
+      const { name, author } = filter;
+      const res = await axios.get(`http://localhost:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
       if (res.data && res.data.list) {
         setList(res.data.list);
+        setTotalItems(res.data.totalItems); 
       } else {
         setError("목록이 없습니다.");
       }
@@ -23,6 +31,7 @@ const Book = () => {
       console.error("Error fetching list:", err);
     }
   }
+  
 
   // 책 세부 정보 가져오기
   async function getBookDetail(id) {
@@ -88,13 +97,37 @@ const Book = () => {
 
   useEffect(() => {
     getBookList();
-  }, []);
+  }, [currentPage]);
+
+    // 페이지 변경
+    const fnPageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+    };
+
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
-    <div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <h1>책 목록</h1>
+    <div>
+    {error && <p style={{ color: "red" }}>{error}</p>}
+    <h1>책 목록</h1>
+    {/* 필터 영역 */}
+    <div>
+      <input
+        type="text"
+        placeholder="제목 검색"
+        value={filter.name}
+        onChange={(e) => setFilter({ ...filter, name: e.target.value })}
+      />
+      <input
+        type="text"
+        placeholder="작가 검색"
+        value={filter.author}
+        onChange={(e) => setFilter({ ...filter, author: e.target.value })}
+      />
+      <button onClick={() => getBookList()}>검색</button>
+    </div>
+      {/* 책 목록 */}
       <table>
         <thead>
           <tr>
@@ -169,6 +202,30 @@ const Book = () => {
           ))}
         </tbody>
       </table>
+       {/* 페이지네이션 버튼 */}
+       <div>
+        <button
+          onClick={() => fnPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          이전
+        </button>
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => fnPageChange(index + 1)}
+            style={{ fontWeight: currentPage === index + 1 ? "bold" : "normal" }}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => fnPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </button>
+      </div>
 
       <h2>책 추가</h2>
       <form
