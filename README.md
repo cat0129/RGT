@@ -14,5 +14,5 @@
 - 도서 목록 / 수정 / 추가 / 삭제 
 
 #### **기능**
-- mysql과 서버를 연결하여 insert/select/update/delete를 사용해 도서 관리 시스템의 조회, 수정, 삭제, 생성 등을 구현하였습니다.
+- mysql과 서버를 연결하여 insert/select/update/delete를 사용해 도서 관리 시스템의 조회, 추가, 수정, 삭제 등을 구현하였습니다.
    
