@@ -7,13 +7,8 @@ const { error } = require('console');
 const app = express();
 const port = 3100;
 
-// MySQL 연결 설정
-const connection = mysql.createConnection({
-  host: '54.180.172.14',
-  user: 'root',     // MySQL 사용자 이름
-  password: 'test1234',     // MySQL 비밀번호
-  database: 'rgt'   // 사용 중인 데이터베이스 이름
-});
+// MySQL 연결
+const connection = require('./db');
 
 app.use(cors());
 app.use(express.json());

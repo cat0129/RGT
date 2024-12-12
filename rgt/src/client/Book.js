@@ -19,7 +19,7 @@ const Book = () => {
   async function getBookList() {
     try {
       const { name, author } = filter;
-      const res = await axios.get(`http://54.180.172.14:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
+      const res = await axios.get(`http://15.165.162.62:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
       if (res.data && res.data.list) {
         setList(res.data.list);
         setTotalItems(res.data.totalItems); 
@@ -36,7 +36,7 @@ const Book = () => {
   // 책 세부 정보 가져오기
   async function getBookDetail(id) {
     try {
-      const res = await axios.get(`http://54.180.172.14:3100/api/books/${id}`);
+      const res = await axios.get(`http://15.165.162.62:3100/api/books/${id}`);
       if (res.data && res.data.book) {
         setDetail(res.data.book);
       } else {
@@ -51,7 +51,7 @@ const Book = () => {
   // 책 추가
   async function addBook() {
     try {
-      const res = await axios.post("http://54.180.172.14:3100/api/books", {
+      const res = await axios.post("http://15.165.162.62:3100/api/books", {
         name: newBook.name,
         author: newBook.author,
         price: newBook.price,
@@ -69,7 +69,7 @@ const Book = () => {
   // 책 수정
   async function updateBook() {
     try {
-      const res = await axios.put(`http://54.180.172.14:3100/api/books/${editBook.id}`, {
+      const res = await axios.put(`http://15.165.162.62:3100/api/books/${editBook.id}`, {
         name: editBook.name,
         author: editBook.author,
         price: editBook.price,
@@ -87,7 +87,7 @@ const Book = () => {
   // 책 삭제
   async function deleteBook(id) {
     try {
-      await axios.delete(`http://54.180.172.14:3100/api/books/${id}`);
+      await axios.delete(`http://15.165.162.62:3100/api/books/${id}`);
       getBookList();
     } catch (err) {
       setError("책 삭제 실패");
@@ -110,9 +110,9 @@ const Book = () => {
 
     <div>
     {error && <p style={{ color: "red" }}>{error}</p>}
-    <h1>책 목록</h1>
+    <h1 style={{alignItems:"center", textAlign:"center", marginTop:"100px"}}>책 목록</h1>
     {/* 필터 영역 */}
-    <div>
+    <div style={{alignItems:"center", textAlign:"center", marginTop:"50px"}}>
       <input
         type="text"
         placeholder="제목 검색"
@@ -128,7 +128,8 @@ const Book = () => {
       <button onClick={() => getBookList()}>검색</button>
     </div>
       {/* 책 목록 */}
-      <table>
+      <div style={{display:"flex", alignItems:"center", justifyContent:"center", marginTop:"50px"}}>
+      <table style={{width:"50%"}}>
         <thead>
           <tr>
             <th>번호</th>
@@ -137,73 +138,83 @@ const Book = () => {
             <th>가격</th>
             <th>판매량</th>
             <th>재고</th>
-            <th>버튼</th>
+            <th>삭제/수정</th>
           </tr>
         </thead>
         <tbody>
           {list.map((item) => (
             <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.author}</td>
-              <td>{item.price}</td>
-              <td>{item.sold}</td>
-              <td>{item.stock}</td>
-              <td>
-                <button onClick={() => deleteBook(item.id)}>삭제</button>
-                <button onClick={() => setEditBook(item)}>수정</button>
-              </td>
-              {/* 수정 폼이 열려 있으면 해당 책 바로 아래에 수정 인풋 박스 표시 */}
-              {editBook.id === item.id && (
-                <tr>
-                  <td colSpan="3">
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        updateBook();
-                      }}
-                    >
-                      <input
-                        type="text"
-                        value={editBook.name}
-                        onChange={(e) => setEditBook({ ...editBook, name: e.target.value })}
-                        placeholder="책 제목"
-                      />
-                      <input
-                        type="text"
-                        value={editBook.author}
-                        onChange={(e) => setEditBook({ ...editBook, author: e.target.value })}
-                        placeholder="작가"
-                      />
-                      <input
-                        type="number"
-                        value={editBook.price}
-                        onChange={(e) => setEditBook({ ...editBook, price: e.target.value })}
-                        placeholder="가격"
-                      />
-                      <input
-                        type="number"
-                        value={editBook.sold}
-                        onChange={(e) => setEditBook({ ...editBook, sold: e.target.value })}
-                        placeholder="판매량"
-                      />
-                      <input
-                        type="number"
-                        value={editBook.stock}
-                        onChange={(e) => setEditBook({ ...editBook, stock: e.target.value })}
-                        placeholder="재고"
-                      />
-                      <button type="submit">책 수정</button>
-                    </form>
+              {editBook.id === item.id ? (
+                <>
+                  <td>{item.id}</td>
+                  <td>
+                    <input class="table-input"
+                      type="text"
+                      value={editBook.name}
+                      onChange={(e) => setEditBook({ ...editBook, name: e.target.value })}
+                      placeholder="책 제목"
+                    />
                   </td>
-                </tr>
+                  <td>
+                    <input class="table-input"
+                      type="text"
+                      value={editBook.author}
+                      onChange={(e) => setEditBook({ ...editBook, author: e.target.value })}
+                      placeholder="작가"
+                    />
+                  </td>
+                  <td>
+                    <input class="table-input"
+                      type="number"
+                      value={editBook.price}
+                      onChange={(e) => setEditBook({ ...editBook, price: e.target.value })}
+                      placeholder="가격"
+                    />
+                  </td>
+                  <td>
+                    <input class="table-input"
+                      type="number"
+                      value={editBook.sold}
+                      onChange={(e) => setEditBook({ ...editBook, sold: e.target.value })}
+                      placeholder="판매량"
+                    />
+                  </td>
+                  <td>
+                    <input class="table-input"
+                      type="number"
+                      value={editBook.stock}
+                      onChange={(e) => setEditBook({ ...editBook, stock: e.target.value })}
+                      placeholder="재고"
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => updateBook()}>저장</button>
+                    <button onClick={() => setEditBook({ id: "", name: "", author: "", price: "", sold: "", stock: "" })}>
+                      취소
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td>{item.id}</td>
+                  <td>{item.name}</td>
+                  <td>{item.author}</td>
+                  <td>{item.price}</td>
+                  <td>{item.sold}</td>
+                  <td>{item.stock}</td>
+                  <td>
+                    <button onClick={() => deleteBook(item.id)}>삭제</button>
+                    <button onClick={() => setEditBook(item)}>수정</button>
+                  </td>
+                </>
               )}
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
        {/* 페이지네이션 버튼 */}
-       <div>
+       <div style={{alignItems:"center", textAlign:"center", marginTop:"30px"}}>
         <button
           onClick={() => fnPageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -227,8 +238,8 @@ const Book = () => {
         </button>
       </div>
 
-      <h2>책 추가</h2>
-      <form
+      <h2 style={{alignItems:"center", textAlign:"center", marginTop:"100px"}}>책 추가</h2>
+      <form style={{alignItems:"center", textAlign:"center"}}
         onSubmit={(e) => {
           e.preventDefault();
           addBook();
