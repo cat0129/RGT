@@ -10,9 +10,19 @@ const port = 3100;
 // MySQL 연결
 const connection = require('./db');
 
-// HTTPS 에이전트 설정 (개발 환경에서만 사용)
+// HTTPS 설정 (개발 환경에서만 사용)
 const https = require('https');
 const agent = new https.Agent({ rejectUnauthorized: false });
+// 외부 HTTPS API 요청 엔드포인트
+app.get('/api/external-books', async (req, res) => {
+  try {
+    const response = await axios.get('https://15.165.162.62:3100/api/books', { httpsAgent: agent });
+    res.json(response.data); // 외부 API 데이터를 클라이언트에 반환
+  } catch (error) {
+    console.error('HTTPS 요청 오류:', error);
+    res.status(500).json({ error: '외부 API 요청 실패' });
+  }
+});
 
 
 app.use(cors());
