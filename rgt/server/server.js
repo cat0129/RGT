@@ -10,10 +10,9 @@ const port = 3100;
 // MySQL 연결
 const connection = require('./db');
 
-//https 
+// HTTPS 에이전트 설정 (개발 환경에서만 사용)
 const https = require('https');
 const agent = new https.Agent({ rejectUnauthorized: false });
-const res = await axios.get('https://15.165.162.62:3100/api/books', { httpsAgent: agent });
 
 
 app.use(cors());
