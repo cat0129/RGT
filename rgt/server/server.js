@@ -15,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
+app.use(cors({ origin: 'https://tangerine-cocada-dee652.netlify.app' }));
+
 // 책목록과 전체 항목 수를 MySQL에서 가져오는 엔드포인트
 app.get('/api/books', (req, res) => {
   const { page = 1, limit = 10, name = "", author = "" } = req.query;  // 기본 페이지 1, 기본 항목 수 10
