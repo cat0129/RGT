@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-//http->https
-const host = window.location.hostname === "localhost" 
-  ? 'http://15.165.162.62'
-  : "api";
 
-export const apiClient = axios.create({
-  baseURL: host,
-});
 
 const Book = () => {
   const [list, setList] = useState([]);
