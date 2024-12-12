@@ -10,11 +10,9 @@ const port = 3100;
 // MySQL 연결
 const connection = require('./db');
 
-
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
-
 
 // 책목록과 전체 항목 수를 MySQL에서 가져오는 엔드포인트
 app.get('/api/books', (req, res) => {
@@ -49,7 +47,6 @@ app.get('/api/books', (req, res) => {
     });
   });
 });
-
 
 
 // 책 세부 정보를 MySQL에서 가져오는 엔드포인트
