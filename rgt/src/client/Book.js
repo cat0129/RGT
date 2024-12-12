@@ -21,7 +21,7 @@ const Book = () => {
   async function getBookList() {
     try {
       const { name, author } = filter;
-      const res = await axios.get(`http://15.165.162.62:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROXY}/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
       if (res.data && res.data.list) {
         setList(res.data.list);
         setTotalItems(res.data.totalItems); 
