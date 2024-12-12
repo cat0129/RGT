@@ -19,7 +19,7 @@ const Book = () => {
   async function getBookList() {
     try {
       const { name, author } = filter;
-      const res = await axios.get(`https://15.165.162.62:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
+      const res = await axios.get(`http://15.165.162.62:3100/api/books?page=${currentPage}&limit=${itemsPerPage}&name=${name}&author=${author}`);
       if (res.data && res.data.list) {
         setList(res.data.list);
         setTotalItems(res.data.totalItems); 
@@ -36,7 +36,7 @@ const Book = () => {
   // 책 세부 정보 가져오기
   async function getBookDetail(id) {
     try {
-      const res = await axios.get(`https://15.165.162.62:3100/api/books/${id}`);
+      const res = await axios.get(`http://15.165.162.62:3100/api/books/${id}`);
       if (res.data && res.data.book) {
         setDetail(res.data.book);
       } else {
@@ -51,7 +51,7 @@ const Book = () => {
   // 책 추가
   async function addBook() {
     try {
-      const res = await axios.post("https://15.165.162.62:3100/api/books", {
+      const res = await axios.post("http://15.165.162.62:3100/api/books", {
         name: newBook.name,
         author: newBook.author,
         price: newBook.price,
@@ -69,7 +69,7 @@ const Book = () => {
   // 책 수정
   async function updateBook() {
     try {
-      const res = await axios.put(`https://15.165.162.62:3100/api/books/${editBook.id}`, {
+      const res = await axios.put(`http://15.165.162.62:3100/api/books/${editBook.id}`, {
         name: editBook.name,
         author: editBook.author,
         price: editBook.price,
@@ -87,7 +87,7 @@ const Book = () => {
   // 책 삭제
   async function deleteBook(id) {
     try {
-      await axios.delete(`https://15.165.162.62:3100/api/books/${id}`);
+      await axios.delete(`http://15.165.162.62:3100/api/books/${id}`);
       getBookList();
     } catch (err) {
       setError("책 삭제 실패");

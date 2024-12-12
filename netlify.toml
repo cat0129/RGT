@@ -1,4 +1,5 @@
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  from = "/api/*"
+  to = "https://15.165.162.62:3100/api/:splat"
+  status = 200
+  force = true
